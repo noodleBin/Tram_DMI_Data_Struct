@@ -29,7 +29,18 @@ void ELS_DMI_Protocol::getDataFromBytes(QByteArray &bytes)
             >>this->DMI_Control>>this->Current_Time>>this->Time_Zone
 
             >>this->ELS_Function_Detailed_Status
+
+        #ifdef Baseline_2.0
+            >>this->BCM_Status
+        #endif
+
             >>this->Radio_Status
+
+        #ifdef Baseline_2.0
+            >>this->Radar_Status
+            >>this->GPS_Status
+        #endif
+
             >>this->System_Ok
 
             >>this->ELS_Service_Mode>>this->Train_Location_Status
