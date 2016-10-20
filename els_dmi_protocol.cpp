@@ -77,6 +77,40 @@ void ELS_DMI_Protocol::getDataFromBytes(QByteArray &bytes)
             >>this->Service_Braking_Applied>>this->Pantograph_Authorization_Status>>this->Sanding_Authorization_Status
             >>this->Left_Doors_Authorization_Status>>this->Right_Doors_Authorization_Status>>this->Docking_Authorization_Status
 
+        #ifdef Baseline_2.0
+            //Signal Warning
+            >>this->Distance_To_Signal
+            >>this->Signal_Status;
+            >>this->Warning_Signal_Anticipation;
+            >>this->Warning_Signal_Infringement;
+
+            //PSR Warning
+            qint16 Distance_To_Next_Restrictive_PSR;
+            quint8 Next_Restrictive_PSR_Speed;
+            quint8 Warning_PSR_Slowdown_Overspeed;
+            quint8 Current_PSR_Speed;
+            quint8 Warning_PSR_Overspeed;
+            quint8 RS_Max_Speed;
+            quint8 Warning_RS_Speed_Overspeed;
+
+            //Radar Data
+            qint16 Radar_Speed;
+            quint8 Risk_Level;
+            quint8 Size_Of_Additional_Data;
+            quint8 Obstacle_Total_Num;
+            quint8 *Obstacle_ID;
+            quint8 *Alarm_Level;
+            quint8 *Obstacle_Straight_Distance;
+            qint8 *Obstacle_Lateral_Distance;
+            quint8 *Obstacle_Attribute;
+
+            //DMI DMI Data Link
+            quint8 DMS_DMI_Data_Size;
+            quint8 *DMS_DMI_Data;
+
+        #endif
+
+
             //Available Schedule, Service, Trip, Path, Destination
             >>Number_of_Schedule;
     Id_of_schedules=new quint16[Number_of_Schedule];
