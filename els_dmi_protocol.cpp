@@ -77,9 +77,9 @@ void ELS_DMI_Protocol::getDataFromBytes(QByteArray &bytes)
             >>this->Service_Braking_Applied>>this->Pantograph_Authorization_Status>>this->Sanding_Authorization_Status
             >>this->Left_Doors_Authorization_Status>>this->Right_Doors_Authorization_Status>>this->Docking_Authorization_Status;
 
-        #ifdef Baseline_2_0
-            //Signal Warning
-            readBytes>>this->Distance_To_Signal
+#ifdef Baseline_2_0
+    //Signal Warning
+    readBytes>>this->Distance_To_Signal
             >>this->Signal_Status
             >>this->Warning_Signal_Anticipation
             >>this->Warning_Signal_Infringement
@@ -195,21 +195,32 @@ void ELS_DMI_Protocol::setBytesFromData(QByteArray &qsend)
            <<this->Current_Time<<this->Time_Zone
 
              //System status
-          <<this->ELS_Function_Detailed_Status<<this->Radio_Status<<this->System_Ok
+          <<this->ELS_Function_Detailed_Status;
 
-            //ELS Data
-         <<this->ELS_Service_Mode<<this->Train_Location_Status<<this->Communication_ELS_DMS_Status
-        <<this->Radio_Coverage_ELS_DMS<<this->ELS_RR_CP_Shutdown<<this->ELS_Current_Speed
+#ifdef Baseline_2_0
+    sendBytes<<this->BCM_Status;
+#endif
 
-          //Service Data
-       <<this->Logical_Train_Id<<this->Physical_Train_Id<<this->Driver_Id<<this->Line_Id
-      <<this->Schedule_Id<<this->Service_Id<<this->Trip_Id
-     <<this->Path_Id<<this->Destination_Id
+    sendBytes<<this->Radio_Status;
 
-       //Mission Management Data
-    <<this->Current_SSA_Id<<this->Next_SSA_Id<<this->Current_SSA_Depature_Time<<this->Next_SSA_Arrival_Time
-    <<this->Passenger_Mission<<this->Running_Type<<this->Skip_Next_SSA<<this->Advance_Delay_Time<<this->Train_Hold
-    <<this->Turn_Back_Required<<this->SSA_of_Driver_End_of_Service<<this->Time_of_Driver_End_of_Service
+#ifdef Baseline_2_0
+    sendBytes<<this->Radar_Status<<this->GPS_Status;
+#endif
+    sendBytes<<this->System_Ok
+
+               //ELS Data
+            <<this->ELS_Service_Mode<<this->Train_Location_Status<<this->Communication_ELS_DMS_Status
+           <<this->Radio_Coverage_ELS_DMS<<this->ELS_RR_CP_Shutdown<<this->ELS_Current_Speed
+
+             //Service Data
+          <<this->Logical_Train_Id<<this->Physical_Train_Id<<this->Driver_Id<<this->Line_Id
+         <<this->Schedule_Id<<this->Service_Id<<this->Trip_Id
+        <<this->Path_Id<<this->Destination_Id
+
+          //Mission Management Data
+       <<this->Current_SSA_Id<<this->Next_SSA_Id<<this->Current_SSA_Depature_Time<<this->Next_SSA_Arrival_Time
+      <<this->Passenger_Mission<<this->Running_Type<<this->Skip_Next_SSA<<this->Advance_Delay_Time<<this->Train_Hold
+     <<this->Turn_Back_Required<<this->SSA_of_Driver_End_of_Service<<this->Time_of_Driver_End_of_Service
     <<this->Time_to_Driver_End_of_Service
 
       //Headway Data
@@ -230,6 +241,46 @@ void ELS_DMI_Protocol::setBytesFromData(QByteArray &qsend)
     <<this->In_Slowdown_Area<<this->ATP_Warning<<this->Emergency_Braking_Applied<<this->Service_Braking_Applied
     <<this->Pantograph_Authorization_Status<<this->Sanding_Authorization_Status<<this->Left_Doors_Authorization_Status
     <<this->Right_Doors_Authorization_Status<<this->Docking_Authorization_Status;
+
+#ifdef Baseline_2_0
+    //Signal Warning
+    sendBytes<<this->Distance_To_Signal
+            <<this->Signal_Status
+           <<this->Warning_Signal_Anticipation
+          <<this->Warning_Signal_Infringement
+
+            //PSR Warning
+         <<this->Distance_To_Next_Restrictive_PSR
+        <<this->Next_Restrictive_PSR_Speed
+       <<this->Warning_PSR_Slowdown_Overspeed
+      <<this->Current_PSR_Speed
+     <<this->Warning_PSR_Overspeed
+    <<this->RS_Max_Speed
+    <<this->Warning_RS_Speed_Overspeed
+
+      //Radar Data
+    <<this->Radar_Speed
+    <<this->Risk_Level
+    <<this->Size_Of_Additional_Data
+    <<this->Obstacle_Total_Num;
+    for(int i=0;i<this->Obstacle_Total_Num;i++)
+    {
+        sendBytes<<this->Obstacle_ID[i]
+                   <<this->Alarm_Level[i]
+                     <<this->Obstacle_Straight_Distance[i]
+                       <<this->Obstacle_Lateral_Distance[i]
+                         <<this->Obstacle_Attribute[i];
+    }
+
+    //DMI DMI Data Link
+    sendBytes<<this->DMS_DMI_Data_Size;
+    for(int i=0;i<this->DMS_DMI_Data_Size;i++)
+    {
+        sendBytes<<this->DMS_DMI_Data[i];
+    }
+
+#endif
+
 
 
     //Available Schedule, Service, Trip, Path, Destination
@@ -752,6 +803,20 @@ void ELS_DMI_Protocol::stepThree()
 
 void ELS_DMI_Protocol::freePointer()
 {
+#ifdef Baseline_2_0
+    if(this->Obstacle_Total_Num>0)
+    {
+        delete[] this->Obstacle_ID;
+        delete[] this->Alarm_Level;
+        delete[] this->Obstacle_Straight_Distance;
+        delete[] this->Obstacle_Lateral_Distance;
+        delete[] this->Obstacle_Attribute;
+    }
+    if(this->DMS_DMI_Data_Size>0)
+    {
+        delete[] DMS_DMI_Data;
+    }
+#endif
     if(this->Number_of_Schedule>0)
     {
         delete[] this->Id_of_schedules;

@@ -7,7 +7,7 @@
 #ifndef DMI_ELS_PROTOCOL_H
 #define DMI_ELS_PROTOCOL_H
 
-#define Baseline_2_0
+
 
 #include <QObject>
 #include <QDataStream>

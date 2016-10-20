@@ -16,12 +16,13 @@ DMI_ELS_Protocol::DMI_ELS_Protocol()
 
 void DMI_ELS_Protocol::resetDefault()
 {
-//    this->ELS_Mode_Selection=0;
+    //    this->ELS_Mode_Selection=0;
     this->Schedule_Id=-1;
     this->Service_Id=-1;
     this->Trip_Id=-1;
     this->Path_Id=-1;
     this->Destination_Id=-1;
+    this->Time_Shift_Request=0;
 }
 
 void DMI_ELS_Protocol::stepOne()
@@ -208,6 +209,10 @@ void DMI_ELS_Protocol::stepThree()
 
 void DMI_ELS_Protocol::freePointer()
 {
+#ifdef Baseline_2_0
+    if(this->DMI_DMS_Data_Size>0)
+        delete[] this->DMI_DMS_Data;
+#endif
     if(this->OCC_Message_Length>0)
         delete[] this->OCC_Message_Text;   //释放内存
     if(this->OSS_Message_Length>0)
@@ -243,7 +248,7 @@ void DMI_ELS_Protocol::clearAll()
 
     //Mission Management
     ELS_Mode_Selection=0;
-    Time_Shift_Request=0x11;
+    Time_Shift_Request=0;
 
 
     //Driver SMS 这部分不在本版基线中
@@ -277,9 +282,19 @@ void DMI_ELS_Protocol::getDataFromBytes(QByteArray &bytes)
 
             >>this->RR_Left_Button>>this->RR_Right_Button>>this->RR_Straight_Button
 
-            >>this->ELS_Mode_Selection>>this->Time_Shift_Request
+            >>this->ELS_Mode_Selection>>this->Time_Shift_Request;
 
-            >>this->OCC_Message_Number>>this->OCC_Message_Length;
+#ifdef Baseline_2_0
+    //DMI DMS Data Link
+    readBytes>>this->DMI_DMS_Data_Size;
+    DMI_DMS_Data=new quint8[this->DMI_DMS_Data_Size];
+    for(int i=0;i<this->DMI_DMS_Data_Size;i++)
+    {
+        readBytes>>this->DMI_DMS_Data[i];
+    }
+#endif
+
+    readBytes>>this->OCC_Message_Number>>this->OCC_Message_Length;
 
     this->OCC_Message_Text=new quint8[OCC_Message_Length];
 
@@ -317,10 +332,19 @@ void DMI_ELS_Protocol::setBytesFromData(QByteArray &qsend)
        <<this->RR_Left_Button<<this->RR_Right_Button<<this->RR_Straight_Button
 
          //Mission Management
-      <<this->ELS_Mode_Selection<<this->Time_Shift_Request
+      <<this->ELS_Mode_Selection<<this->Time_Shift_Request;
 
-        //Driver SMS
-     <<this->OCC_Message_Number<<this->OCC_Message_Length;
+#ifdef Baseline_2_0
+    sendBytes<<this->DMI_DMS_Data_Size;
+    if(this->DMI_DMS_Data_Size>0)
+    {
+        for(int i=0;i<this->DMI_DMS_Data_Size;i++)
+            sendBytes<<this->DMI_DMS_Data[i];
+    }
+#endif
+
+    //Driver SMS
+    sendBytes<<this->OCC_Message_Number<<this->OCC_Message_Length;
     if(OCC_Message_Length>0)
     {
         for(int i=0;i<OCC_Message_Length;i++)
