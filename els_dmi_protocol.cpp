@@ -30,13 +30,13 @@ void ELS_DMI_Protocol::getDataFromBytes(QByteArray &bytes)
 
             >>this->ELS_Function_Detailed_Status
 
-        #ifdef Baseline_2.0
+        #ifdef Baseline_2_0
             >>this->BCM_Status
         #endif
 
             >>this->Radio_Status
 
-        #ifdef Baseline_2.0
+        #ifdef Baseline_2_0
             >>this->Radar_Status
             >>this->GPS_Status
         #endif
@@ -75,44 +75,54 @@ void ELS_DMI_Protocol::getDataFromBytes(QByteArray &bytes)
             >>this->Train_Protection_Control_Status>>this->ATP_Inhibition_Status>>this->Current_Speed
             >>this->Authorized_Speed>>this->In_Slowdown_Area>>this->ATP_Warning>>this->Emergency_Braking_Applied
             >>this->Service_Braking_Applied>>this->Pantograph_Authorization_Status>>this->Sanding_Authorization_Status
-            >>this->Left_Doors_Authorization_Status>>this->Right_Doors_Authorization_Status>>this->Docking_Authorization_Status
+            >>this->Left_Doors_Authorization_Status>>this->Right_Doors_Authorization_Status>>this->Docking_Authorization_Status;
 
-        #ifdef Baseline_2.0
+        #ifdef Baseline_2_0
             //Signal Warning
-            >>this->Distance_To_Signal
-            >>this->Signal_Status;
-            >>this->Warning_Signal_Anticipation;
-            >>this->Warning_Signal_Infringement;
+            readBytes>>this->Distance_To_Signal
+            >>this->Signal_Status
+            >>this->Warning_Signal_Anticipation
+            >>this->Warning_Signal_Infringement
 
             //PSR Warning
-            qint16 Distance_To_Next_Restrictive_PSR;
-            quint8 Next_Restrictive_PSR_Speed;
-            quint8 Warning_PSR_Slowdown_Overspeed;
-            quint8 Current_PSR_Speed;
-            quint8 Warning_PSR_Overspeed;
-            quint8 RS_Max_Speed;
-            quint8 Warning_RS_Speed_Overspeed;
+            >>this->Distance_To_Next_Restrictive_PSR
+            >>this->Next_Restrictive_PSR_Speed
+            >>this->Warning_PSR_Slowdown_Overspeed
+            >>this->Current_PSR_Speed
+            >>this->Warning_PSR_Overspeed
+            >>this->RS_Max_Speed
+            >>this->Warning_RS_Speed_Overspeed
 
             //Radar Data
-            qint16 Radar_Speed;
-            quint8 Risk_Level;
-            quint8 Size_Of_Additional_Data;
-            quint8 Obstacle_Total_Num;
-            quint8 *Obstacle_ID;
-            quint8 *Alarm_Level;
-            quint8 *Obstacle_Straight_Distance;
-            qint8 *Obstacle_Lateral_Distance;
-            quint8 *Obstacle_Attribute;
+            >>this->Radar_Speed
+            >>this->Risk_Level
+            >>this->Size_Of_Additional_Data
+            >>this->Obstacle_Total_Num;
+    Obstacle_ID = new quint8[Obstacle_Total_Num];
+    Alarm_Level= new quint8[Obstacle_Total_Num];
+    Obstacle_Straight_Distance= new quint8[Obstacle_Total_Num];
+    Obstacle_Lateral_Distance= new qint8[Obstacle_Total_Num];
+    Obstacle_Attribute= new quint8[Obstacle_Total_Num];
 
-            //DMI DMI Data Link
-            quint8 DMS_DMI_Data_Size;
-            quint8 *DMS_DMI_Data;
+    for(int i=0;i<this->Obstacle_Total_Num;i++)
+    {
+        readBytes>>this->Obstacle_ID[i]>>this->Alarm_Level[i]>>this->Obstacle_Straight_Distance[i]
+                >>this->Obstacle_Lateral_Distance[i]>>this->Obstacle_Attribute[i];
+    }
 
-        #endif
+    //DMI DMI Data Link
+    readBytes>>this->DMS_DMI_Data_Size;
+    DMS_DMI_Data=new quint8[this->DMS_DMI_Data_Size];
+    for(int i=0;i<this->DMS_DMI_Data_Size;i++)
+    {
+        readBytes>>this->DMS_DMI_Data[i];
+    }
+
+#endif
 
 
-            //Available Schedule, Service, Trip, Path, Destination
-            >>Number_of_Schedule;
+    //Available Schedule, Service, Trip, Path, Destination
+    readBytes>>Number_of_Schedule;
     Id_of_schedules=new quint16[Number_of_Schedule];
     for(int i=0;i<Number_of_Schedule;i++)
         readBytes>>Id_of_schedules[i];

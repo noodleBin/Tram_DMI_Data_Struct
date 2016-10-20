@@ -7,7 +7,7 @@
 #ifndef DMI_ELS_PROTOCOL_H
 #define DMI_ELS_PROTOCOL_H
 
-#define Baseline_2.0
+#define Baseline_2_0
 
 #include <QObject>
 #include <QDataStream>
@@ -63,7 +63,7 @@ public:
     quint8 ELS_Mode_Selection;
     quint8 Time_Shift_Request;
 
-#ifdef Baseline_2.0
+#ifdef Baseline_2_0
     //DMI DMS Data Link
     quint8 DMI_DMS_Data_Size;
     quint8 *DMI_DMS_Data;

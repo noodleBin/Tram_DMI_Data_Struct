@@ -7,7 +7,7 @@
 #ifndef ELS_DMI_PROTOCOL_H
 #define ELS_DMI_PROTOCOL_H
 
-#define Baseline_2.0
+#define Baseline_2_0
 
 #include <QObject>
 #include <QDataStream>
@@ -47,13 +47,13 @@ public:
     //System Status
     quint8 ELS_Function_Detailed_Status;
 
-#ifdef Baseline_2.0
+#ifdef Baseline_2_0
     quint8 BCM_Status;
 #endif
 
     quint8 Radio_Status;
 
-#ifdef Baseline_2.0
+#ifdef Baseline_2_0
     quint8 Radar_Status;
     quint8 GPS_Status;
 #endif
@@ -135,7 +135,7 @@ public:
     quint8 Right_Doors_Authorization_Status;
     quint8 Docking_Authorization_Status;
 
-#ifdef Baseline_2.0
+#ifdef Baseline_2_0
     //Signal Warning
     qint16 Distance_To_Signal;
     quint8 Signal_Status;
