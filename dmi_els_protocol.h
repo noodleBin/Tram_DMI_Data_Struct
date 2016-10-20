@@ -7,6 +7,8 @@
 #ifndef DMI_ELS_PROTOCOL_H
 #define DMI_ELS_PROTOCOL_H
 
+#define Baseline_2.0
+
 #include <QObject>
 #include <QDataStream>
 #include <time.h>
@@ -60,6 +62,12 @@ public:
     //Mission Management  2bytes
     quint8 ELS_Mode_Selection;
     quint8 Time_Shift_Request;
+
+#ifdef Baseline_2.0
+    //DMI DMS Data Link
+    quint8 DMI_DMS_Data_Size;
+    quint8 *DMI_DMS_Data;
+#endif
 
     //SMS To OCC Setting  7bytes
     qint16 OCC_Message_Number;
