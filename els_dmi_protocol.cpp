@@ -10,7 +10,7 @@ ELS_DMI_Protocol::ELS_DMI_Protocol()
 {
     //        stepTwo();
     //    stepThree();
-    stepOne();
+    stepOne(); //equal clear, such as sent some data size =0
     this->ELS_Message_Number=0;
 }
 
@@ -438,6 +438,39 @@ void ELS_DMI_Protocol::stepOne()
     //Geographic Events
     Number_of_Active_Events=0;
 
+#ifdef Baseline_2_0
+    //Signal Warning
+//    qint16 Distance_To_Signal;
+//    quint8 Signal_Status;
+//    quint8 Warning_Signal_Anticipation;
+//    quint8 Warning_Signal_Infringement;
+
+//    //PSR Warning
+//    qint16 Distance_To_Next_Restrictive_PSR;
+//    quint8 Next_Restrictive_PSR_Speed;
+//    quint8 Warning_PSR_Slowdown_Overspeed;
+//    quint8 Current_PSR_Speed;
+//    quint8 Warning_PSR_Overspeed;
+//    quint8 RS_Max_Speed;
+//    quint8 Warning_RS_Speed_Overspeed;
+
+//    //Radar Data
+//    qint16 Radar_Speed;
+//    quint8 Risk_Level;
+//    quint8 Size_Of_Additional_Data;
+     Obstacle_Total_Num=0;
+//    quint8 *Obstacle_ID;
+//    quint8 *Alarm_Level;
+//    quint8 *Obstacle_Straight_Distance;
+//    qint8 *Obstacle_Lateral_Distance;
+//    quint8 *Obstacle_Attribute;
+
+    //DMI DMI Data Link
+    DMS_DMI_Data_Size=0;
+//    quint8 *DMS_DMI_Data;
+
+#endif
+
 
 }
 
@@ -804,6 +837,7 @@ void ELS_DMI_Protocol::stepThree()
 void ELS_DMI_Protocol::freePointer()
 {
 #ifdef Baseline_2_0
+//    qDebug()<<"obs num"<<Obstacle_Total_Num;
     if(this->Obstacle_Total_Num>0)
     {
         delete[] this->Obstacle_ID;

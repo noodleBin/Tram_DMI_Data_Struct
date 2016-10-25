@@ -17,12 +17,12 @@ DMI_ELS_Protocol::DMI_ELS_Protocol()
 void DMI_ELS_Protocol::resetDefault()
 {
     //    this->ELS_Mode_Selection=0;
-    this->Schedule_Id=-1;
-    this->Service_Id=-1;
-    this->Trip_Id=-1;
-    this->Path_Id=-1;
-    this->Destination_Id=-1;
-    this->Time_Shift_Request=0;
+//    this->Schedule_Id=-1;
+//    this->Service_Id=-1;
+//    this->Trip_Id=-1;
+//    this->Path_Id=-1;
+//    this->Destination_Id=-1;
+//    this->Time_Shift_Request=0;
 }
 
 void DMI_ELS_Protocol::stepOne()
