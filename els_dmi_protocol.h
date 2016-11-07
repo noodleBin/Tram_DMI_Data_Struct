@@ -7,7 +7,7 @@
 #ifndef ELS_DMI_PROTOCOL_H
 #define ELS_DMI_PROTOCOL_H
 
-#include "../Casco_DMIor/Public_Variable.h"
+#include "Public_Variable.h"
 
 #include <QObject>
 #include <QDataStream>

@@ -6,7 +6,7 @@
 ******************************/
 #ifndef DMI_ELS_PROTOCOL_H
 #define DMI_ELS_PROTOCOL_H
-#include "../Casco_DMIor/Public_Variable.h"
+#include "Public_Variable.h"
 
 
 #include <QObject>
