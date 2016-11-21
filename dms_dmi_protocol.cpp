@@ -8,6 +8,7 @@
 
 #include <QObject>
 #include <QDataStream>
+#include <QDebug>
 
 #include "dms_dmi_protocol.h"
 
@@ -88,8 +89,12 @@ void DMS_DMI_Protocol::setBytesFromData(QByteArray &qsend)
             <<this->Bitmap_Length;
     if(this->Bitmap_Length>0)
     {
+//        qDebug()<<"in simu bitmaplen"<<Bitmap_Length;
         for(int i=0;i<this->Bitmap_Length;i++)
+        {
             sendBytes<<Bitmap[i];
+//            qDebug()<<"Bitmap["<<i<<"]"<<Bitmap[i];
+        }
     }
 
 }
