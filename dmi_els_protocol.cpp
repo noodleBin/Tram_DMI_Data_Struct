@@ -70,6 +70,7 @@ void DMI_ELS_Protocol::stepOne()
 
     //SMS To Driver Report
     Driver_Message_Number=-1;
+    DMI_DMS_Data_Size=0;
 }
 
 void DMI_ELS_Protocol::stepTwo()
