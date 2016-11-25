@@ -33,7 +33,7 @@ void DMI_ELS_Protocol::stepOne()
     DMI_Message_Time_Stamp=0;
 
     //DMI Status
-    DMI_Status=0;
+    DMI_Status=1;
     Display_Status=0;
 
     //Service Data

@@ -421,7 +421,7 @@ void ELS_DMI_Protocol::stepOne()
     Number_of_Destinations=0;
 
     //SMS To Driver Setting
-    Driver_Message_Number=-1;
+    Driver_Message_Number=3;
     Driver_Message_Length=0;
 
     //SMS_To OCC Report
